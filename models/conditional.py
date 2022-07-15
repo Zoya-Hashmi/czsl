@@ -17,9 +17,9 @@ from .common import MLP
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class conditional_module(nn.Module):
-    def __init__(self,inp_dim,out_dim):
+    def __init__(self,inp_dim,out_dim,hid_dim):
         super().__init__()
-        self.w = MLP(2*inp_dim,out_dim,num_layers=2,dropout=True,norm=True,layers=[args.hid_dim],relu=False)
+        self.w = MLP(2*inp_dim,out_dim,num_layers=2,dropout=True,norm=True,layers=[hid_dim],relu=False)
     def forward(self,a,o):
         xa = torch.sigmoid(self.w(torch.cat([a,o],1)))
         xa = xa*a
@@ -29,9 +29,9 @@ class compnet(nn.Module):
     def __init__(self,args):
         super().__init__()
         self.args = args
-        self.attr_embdr = conditional_module(self.args.wemb_dim,self.args.wemb_dim)
-        self.obj_embdr = conditional_module(self.args.wemb_dim,self.args.wemb_dim)
-        self.comp = MLP(inp_dim=2*self.args.wemb_dim,out_dim=args.emb_dim,num_layers=2,dropout=False,norm=False,layers=[args.hid_dim],relu=False)
+        self.attr_embdr = conditional_module(self.args.wemb_dim,self.args.wemb_dim,self.args.hid_dim)
+        self.obj_embdr = conditional_module(self.args.wemb_dim,self.args.wemb_dim,self.args.hid_dim)
+        self.comp = MLP(inp_dim=2*self.args.wemb_dim,out_dim=self.args.emb_dim,num_layers=2,dropout=False,norm=False,layers=[self.args.hid_dim],relu=False)
 
     def forward(self,a,o):
         xa,xo=None, None
@@ -65,15 +65,15 @@ class Conditional(nn.Module):
         self.attr_embds = embeddings[:len(self.dset.attrs),:].to(device)
         self.obj_embds = embeddings[len(self.dset.attrs):len(self.dset.attrs)+len(self.dset.objs),:].to(device)
 
-        self.image_embedder = MLP(inp_dim=args._vemb_dim,out_dim=args.emb_dim,num_layers=args.nlayers,dropout=True,norm=True,layers=[args.hid_dim,args.hid_dim],relu=False) #####
+        self.image_embedder = MLP(inp_dim=self.args.vemb_dim,out_dim=self.args.emb_dim,num_layers=self.args.nlayers,dropout=True,norm=True,layers=[self.args.hid_dim,self.args.hid_dim],relu=False) #####
         self.comp_embedder = compnet(self.args)
 
         self.train_forward = self.train_forward_ce
         self.val_forward = self.val_forward_dotpr
                 
         if args.lambda_aux>0:
-            self.obj_clf = nn.Linear(args.wemb_dim, len(dset.objs)) 
-            self.attr_clf = nn.Linear(args.wemb_dim, len(dset.attrs)) 
+            self.obj_clf = nn.Linear(self.args.wemb_dim, len(dset.objs)) 
+            self.attr_clf = nn.Linear(self.args.wemb_dim, len(dset.attrs)) 
     
     def train_forward_ce(self, x):
 
