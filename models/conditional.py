@@ -1,19 +1,19 @@
 ## OUR EXPERIMENTS
-#from os.path import join as ospj
-#import csv
-#import pickle 
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-#import torchvision.models as tmodels
-#import numpy as np
-#import utils
-#import itertools
-#import math
-#import collections
 from .common import MLP
+import random
 
+random.seed(2)
+torch.manual_seed(1)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed(1)
+    torch.cuda.manual_seed_all(1)
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
+    
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class conditional_module(nn.Module):
