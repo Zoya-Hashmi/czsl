@@ -17,7 +17,7 @@ def configure_model(args, dataset):
     image_extractor = None
     is_open = False
     
-    if args.model == 'conditional':
+    if args.model == 'Conditional':
         model = Conditional(dataset,args)
     elif args.model == 'visprodNN':
         model = VisualProductNN(dataset, args)
