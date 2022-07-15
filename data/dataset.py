@@ -15,6 +15,15 @@ from utils.utils import get_norm_values, chunks
 from models.image_extractor import get_image_extractor
 from itertools import product
 
+np.random.seed(2)
+random.seed(2)
+torch.manual_seed(1)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed(1)
+    torch.cuda.manual_seed_all(1)
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
+
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class ImageLoader:
