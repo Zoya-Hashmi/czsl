@@ -1,5 +1,6 @@
 import torch
 import torch.optim as optim
+import random 
 
 from models.image_extractor import get_image_extractor
 from models.visual_product import VisualProductNN
@@ -9,6 +10,14 @@ from models.graph_method import GraphFull
 from models.symnet import Symnet
 from models.compcos import CompCos
 from models.conditional import Conditional #,attnet,compnet
+
+random.seed(2)
+torch.manual_seed(1)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed(1)
+    torch.cuda.manual_seed_all(1)
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
