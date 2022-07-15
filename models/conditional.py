@@ -65,7 +65,7 @@ class Conditional(nn.Module):
         self.attr_embds = embeddings[:len(self.dset.attrs),:].to(device)
         self.obj_embds = embeddings[len(self.dset.attrs):len(self.dset.attrs)+len(self.dset.objs),:].to(device)
 
-        self.image_embedder = MLP(inp_dim=self.args.vemb_dim,out_dim=self.args.emb_dim,num_layers=self.args.nlayers,dropout=True,norm=True,layers=[self.args.hid_dim,self.args.hid_dim],relu=False) #####
+        self.image_embedder = MLP(inp_dim=self.args.vemb_dim,out_dim=self.args.emb_dim,num_layers=self.args.nlayers,dropout=True,norm=True,layers=[self.args.hid_dim,self.args.hid_dim],relu=True) #####
         self.comp_embedder = compnet(self.args)
 
         self.train_forward = self.train_forward_ce
