@@ -1,11 +1,13 @@
 
 # Compositional Zero-Shot Learning
-### Create Python Environment
+
+Helpful Commands
+### Creating Python Environment
 ```
     conda env create --file environment.yml
     conda activate czsl
 ```
-### Download Data
+### Downloading Data
 ```
     bash ./utils/download_data.sh DATA_ROOT
     mkdir logs
