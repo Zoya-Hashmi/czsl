@@ -4,7 +4,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.tensorboard import SummaryWriter
 import torch.backends.cudnn as cudnn
-cudnn.benchmark = True
+# cudnn.benchmark = True
+import random
 
 # Python imports
 import tqdm
@@ -19,6 +20,15 @@ from models.common import Evaluator
 from utils.utils import save_args, load_args
 from utils.config_model import configure_model
 from flags import parser, DATA_FOLDER
+
+random.seed(2)
+torch.manual_seed(1)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed(1)
+    torch.cuda.manual_seed_all(1)
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
+
 
 best_auc = 0
 best_hm = 0
