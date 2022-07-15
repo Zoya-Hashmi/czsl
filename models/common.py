@@ -4,6 +4,16 @@ import torch.nn.functional as F
 import numpy as np
 import copy
 from scipy.stats import hmean
+import random
+
+np.random.seed(2)
+random.seed(2)
+torch.manual_seed(1)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed(1)
+    torch.cuda.manual_seed_all(1)
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
