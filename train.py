@@ -92,6 +92,7 @@ def main():
             except:
                 print('No Image extractor in checkpoint')
         model.load_state_dict(checkpoint['net'])
+        optimizer.load_state_dict(checkpoint['optim'])
         start_epoch = checkpoint['epoch']
         print('Loaded model from ', args.load)
     
@@ -103,7 +104,7 @@ def main():
 
         if epoch % args.eval_val_every == 0:
             with torch.no_grad(): # todo: might not be needed
-                test(epoch, image_extractor, model, testloader, evaluator_val, writer, args, logpath)
+                test(epoch, image_extractor, model, testloader, evaluator_val, writer, args, logpath, optimizer)
     print('Best AUC achieved is ', best_auc)
     print('Best HM achieved is ', best_hm)
 
@@ -137,7 +138,7 @@ def train_normal(epoch, image_extractor, model, trainloader, optimizer, writer):
     print('Epoch: {}| Loss: {}'.format(epoch, round(train_loss, 2)))
 
 
-def test(epoch, image_extractor, model, testloader, evaluator, writer, args, logpath):
+def test(epoch, image_extractor, model, testloader, evaluator, writer, args, logpath, optimizer):
     '''
     Runs testing for an epoch
     '''
@@ -147,7 +148,8 @@ def test(epoch, image_extractor, model, testloader, evaluator, writer, args, log
         state = {
             'net': model.state_dict(),
             'epoch': epoch,
-            'AUC': stats['AUC']
+            'AUC': stats['AUC'],
+            'optim' : optimizer.state_dict()
         }
         if image_extractor:
             state['image_extractor'] = image_extractor.state_dict()

@@ -25,6 +25,9 @@ parser.add_argument('--cpu_eval', action='store_true', help='Perform test on cpu
 # Model parameters
 parser.add_argument('--model', default='graphfull', help='visprodNN|redwine|labelembed+|attributeop|tmn|compcos')
 parser.add_argument('--emb_dim', type=int, default=300, help='dimension of share embedding space')
+parser.add_argument('--hid_dim', type=int, default=300, help='dimension of hidden layers of the model')
+parser.add_argument('--wemb_dim', type=int, default=600, help='dimension of word embedding features')
+parser.add_argument('--vemb_dim', type=int, default=512, help='dimension of visual embedding features')
 parser.add_argument('--nlayers', type=int, default=3, help='Layers in the image embedder')
 parser.add_argument('--nmods', type=int, default=24, help='number of mods per layer for TMN')
 parser.add_argument('--embed_rank', type=int, default=64, help='intermediate dimension in the gating model for TMN')

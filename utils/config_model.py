@@ -8,6 +8,7 @@ from models.modular_methods import GatedGeneralNN
 from models.graph_method import GraphFull
 from models.symnet import Symnet
 from models.compcos import CompCos
+from models.conditional import Conditional #,attnet,compnet
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -15,8 +16,10 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 def configure_model(args, dataset):
     image_extractor = None
     is_open = False
-
-    if args.model == 'visprodNN':
+    
+    if args.model == 'conditional':
+        model = Conditional(dataset,args)
+    elif args.model == 'visprodNN':
         model = VisualProductNN(dataset, args)
     elif args.model == 'redwine':
         model = RedWine(dataset, args)
